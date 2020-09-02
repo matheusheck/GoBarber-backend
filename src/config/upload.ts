@@ -1,8 +1,8 @@
-import pach from 'path';
+import path from 'path';
 import crypto from 'crypto';
 import multer from 'multer';
 
-const tempFolder = pach.resolve(__dirname, '..', '..', 'tmp');
+const tempFolder = path.resolve(__dirname, '..', '..', 'tmp');
 
 export default {
   directory: tempFolder,
