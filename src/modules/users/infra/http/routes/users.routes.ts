@@ -3,6 +3,7 @@ import multer from 'multer';
 import uploadConfig from '@config/upload';
 import { container } from 'tsyringe';
 
+import UserMap from '@modules/users/mappers/UserMapper';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 
@@ -22,9 +23,9 @@ usersRouter.post('/', async (request, response) => {
     password,
   });
 
-  delete user.password;
+  const mappedUser = UserMap.toDTO(user);
 
-  return response.json(user);
+  return response.json(mappedUser);
 });
 
 usersRouter.patch(
@@ -39,9 +40,9 @@ usersRouter.patch(
       avatarFileName: request.file.filename,
     });
 
-    delete user.password;
+    const mappedUser = UserMap.toDTO(user);
 
-    return response.json(user);
+    return response.json(mappedUser);
   },
 );
 
