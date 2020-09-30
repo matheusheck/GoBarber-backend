@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import UserMap from '@modules/users/mappers/UserMapper';
 
-import AuthenticationUserService from '@modules/users/services/AuthenticationUserService';
+import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
 
 export default class SessionsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
 
-    const authenticateUser = container.resolve(AuthenticationUserService);
+    const authenticateUser = container.resolve(AuthenticateUserService);
 
     const { user, token } = await authenticateUser.execute({
       email,

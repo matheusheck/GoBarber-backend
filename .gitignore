@@ -3,5 +3,8 @@
 node_modules/
 build/
 
+coverage
+*.lcov
+
 tmp/*
 !tmp/.gitkeep
