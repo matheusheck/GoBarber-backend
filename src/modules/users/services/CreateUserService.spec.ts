@@ -1,5 +1,4 @@
 import AppError from '@shared/errors/AppError';
-import { response } from 'express';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import CreateUserService from './CreateUserService';
@@ -24,7 +23,7 @@ describe('CreateUser', () => {
     const fakeHashProvider = new FakeHashProvider();
     const createUser = new CreateUserService(fakeRepository, fakeHashProvider);
 
-    const user = await createUser.execute({
+    await createUser.execute({
       name: 'John Doe',
       email: 'john@example.com',
       password: 'P@ssword123',
