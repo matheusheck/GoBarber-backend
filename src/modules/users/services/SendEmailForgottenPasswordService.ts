@@ -4,6 +4,7 @@ import AppError from '@shared/errors/AppError';
 
 // import User from '@modules/users/infra/typeorm/entity/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 
 interface IRequest {
@@ -18,14 +19,20 @@ class SendEmailForgottenPasswordService {
 
     @inject('MailProvider')
     private mailProvider: IMailProvider,
+
+    @inject('UserTokensRepository')
+    private userTokensRepository: IUserTokensRepository,
   ) {}
 
   public async execute({ email }: IRequest): Promise<void> {
-    const checkUserExists = await this.usersRepository.findByEmail(email);
+    const user = await this.usersRepository.findByEmail(email);
 
-    if (!checkUserExists) {
+    if (!user) {
       throw new AppError('User should exist');
     }
+
+    await this.userTokensRepository.generate(user.id);
+
     this.mailProvider.sendMail(email, 'Pedido de recuperação de senha');
   }
 }
