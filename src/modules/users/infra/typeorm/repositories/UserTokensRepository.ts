@@ -5,7 +5,7 @@ import IUserTokensRepository from '@modules/users/repositories/IUserTokensReposi
 import UserToken from '@modules/users/infra/typeorm/entity/UserToken';
 
 class UserTokensRepository implements IUserTokensRepository {
-  private ormRepository: Repository<User>;
+  private ormRepository: Repository<UserToken>;
 
   constructor() {
     this.ormRepository = getRepository(UserToken);
@@ -18,7 +18,9 @@ class UserTokensRepository implements IUserTokensRepository {
   }
 
   public async generate(user_id: string): Promise<UserToken> {
-    const userToken = this.ormRepository.create(user_id);
+    const userToken = this.ormRepository.create({
+      user_id,
+    });
 
     await this.ormRepository.save(userToken);
 

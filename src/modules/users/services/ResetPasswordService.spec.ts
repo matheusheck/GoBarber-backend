@@ -10,7 +10,7 @@ let fakeUserTokensRepository: FakeUserTokensRepository;
 let fakeHashProvider: FakeHashProvider;
 let resetPasswordService: ResetPasswordService;
 
-describe('ReserPasswordService', () => {
+describe('ResetPasswordService', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeUserTokensRepository = new FakeUserTokensRepository();
