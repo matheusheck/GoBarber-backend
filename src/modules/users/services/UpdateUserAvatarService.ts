@@ -1,5 +1,3 @@
-import path from 'path';
-import fs from 'fs';
 import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
@@ -7,7 +5,6 @@ import AppError from '@shared/errors/AppError';
 import User from '@modules/users/infra/typeorm/entity/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
-import uploadConfig from '@config/upload';
 
 interface IRequest {
   user_id: string;
