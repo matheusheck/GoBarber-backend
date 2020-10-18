@@ -73,4 +73,5 @@
 - Cada agendamento deve durar 1 hora
 - Os agendamentos são das 08:00 as 18:00
 - Os agendamentos não podem ser no mesmo horário
+- Os agendamentos não podem ser em horário passado
 - Os usuário não podem usar serviço consigo mesmo
