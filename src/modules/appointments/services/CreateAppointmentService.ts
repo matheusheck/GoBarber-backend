@@ -5,8 +5,8 @@ import AppError from '@shared/errors/AppError';
 
 import Appointment from '@modules/appointments/infra/typeorm/entity/Appointment';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
-import Notification from '@modules/notifications/infra/typeorm/schemas/Notification';
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 
 interface IRequest {
   provider_id: string;
@@ -22,6 +22,9 @@ class CreateAppointmentService {
 
     @inject('NotificationsRepository')
     private notificationsRepository: INotificationsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -30,6 +33,10 @@ class CreateAppointmentService {
     user_id,
   }: IRequest): Promise<Appointment> {
     const appointmentDate = startOfHour(date);
+
+    if (isBefore(appointmentDate, Date.now())) {
+      throw new AppError('You can not schedule an appointment on the past.');
+    }
 
     if (user_id === provider_id) {
       throw new AppError('You can not schedule an appointment with yourself.');
@@ -47,22 +54,25 @@ class CreateAppointmentService {
       throw new AppError('🔴This appointment is already booked. 🔴');
     }
 
-    if (isBefore(appointmentDate, Date.now())) {
-      throw new AppError('You can not schedule an appointment on the past.');
-    }
-
     const appointment = await this.appointmentsRepository.create({
       provider_id,
       user_id,
       date: appointmentDate,
     });
 
-    const dateFormated = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm");
+    const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm");
 
     await this.notificationsRepository.create({
       recipient_id: provider_id,
-      content: `Novo agendamento para o dia ${dateFormated}`,
+      content: `Novo agendamento para o dia ${dateFormatted}`,
     });
+
+    await this.cacheProvider.invalidate(
+      `provider-appointments:${provider_id}:${format(
+        appointmentDate,
+        'yyyy-M-d',
+      )}`,
+    );
 
     return appointment;
   }
