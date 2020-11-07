@@ -1,10 +1,10 @@
 module.exports = {
   presets: [
-  ['@babel/preset-env', { tardets: { node: 'current' } }],
+  ['@babel/preset-env', { targets: { node: 'current' } }],
   '@babel/preset-typescript'
   ],
   plugins:[
-    ['module.resolver', {
+    ['module-resolver', {
       alias: {
       "@module": "./src/modules",
       "@config": "./src/config",
