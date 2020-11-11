@@ -24,10 +24,7 @@ class User {
   @Exclude()
   password: string;
 
-  @Column({
-    default:
-      'https://gobarber-heck.s3.us-east-2.amazonaws.com/avatarDefault.jpg',
-  })
+  @Column()
   avatar: string;
 
   @CreateDateColumn()

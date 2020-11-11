@@ -18,11 +18,7 @@ export default class S3StorageProvider implements IStorageProvider {
   public async saveFile(file: string): Promise<string> {
     const originalPath = path.resolve(uploadConfig.tmpFolder, file);
 
-    console.log(originalPath);
-
     const ContentType = mime.getType(originalPath);
-
-    console.log(ContentType);
 
     if (!ContentType) {
       throw new Error('File not found');
@@ -40,8 +36,6 @@ export default class S3StorageProvider implements IStorageProvider {
         ContentDisposition: `inline; filename=${file}`,
       })
       .promise();
-
-    await fs.promises.unlink(originalPath);
 
     return file;
   }
